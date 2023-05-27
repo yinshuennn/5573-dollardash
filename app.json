@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "DollarDash",
+    "slug": "DollarDash",
+    "owner": "dollardash",
+    "privacy": "public",
+    "description": "This is an expense tracker mobile application",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/Logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.brendatan.DollarDash"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.brendatan.FirebaseAuth"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5ec110c7-6e5c-428b-b67a-37397fa228da"
+      }
+    }
+  }
+}
