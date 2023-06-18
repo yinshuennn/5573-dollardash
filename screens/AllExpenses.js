@@ -13,7 +13,7 @@ const AllExpenses = () => {
   const navigation = useNavigation()
 
   const handleBack = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Login');
   };
 
   const handleProfile = () => {
@@ -125,7 +125,7 @@ const AllExpenses = () => {
     )
   }
 
-  function bottomPanel() {
+  function BottomPanel() {
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
         <TouchableOpacity
@@ -238,12 +238,12 @@ const AllExpenses = () => {
     
   return (
     <SafeAreaProvider>
-      <SafeAreaView>
-        <ScrollView>
-          {renderHeader()}
+      <SafeAreaView style={{ flex: 1 }}>
+        {renderHeader()}
+        <ScrollView style={{ flex: 1 }}>
           {renderTransactionHistory()}
-          {bottomPanel()}
         </ScrollView>
+        <BottomPanel />
       </SafeAreaView>
     </SafeAreaProvider>
   );

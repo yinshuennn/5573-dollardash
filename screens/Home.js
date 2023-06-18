@@ -6,7 +6,7 @@ import income from '../assets/icons/income.png';
 import bill from '../assets/icons/bill.png';
 import budget from '../assets/icons/budget.png';
 import { Pressable } from 'react-native';
-import { firebase } from '../firebase';
+import { firebase, auth, db } from '../firebase';
 const Home = () => {
 
   const handleBack = () => {
@@ -19,10 +19,6 @@ const Home = () => {
 
   const handleAddExpense = () => {
     navigation.navigate('AddNewExpense');
-  }
-
-  const handleGroups = () => {
-    navigation.navigate('Income');
   }
 
   const handleIncome = () => {
@@ -152,32 +148,37 @@ const Home = () => {
     }
 
     function renderTransactionHistory() {
-      const [users, setUsers] = useState([]);
+      const [transactions, setTransactions] = useState([]);
       const expensesRef = firebase.firestore().collection('Expenses');
-
-      useEffect(async () => {
-        expensesRef
-        .orderBy('createdAt', 'desc')
-        .limit(3)
-        .onSnapshot(
-          querySnapshot => {
-            const users = []
-            querySnapshot.forEach((doc) => {
-              const{ description, price, category } = doc.data()
-              users.push({
-                id: doc.id,
-                description,
-                price,
-                category,
-              })
-            })
-            setUsers(users)
-          }
-        )
-      }, [])
-
+      const currentUser = auth.currentUser;
+    
+      useEffect(() => {
+        if (currentUser) {
+          const unsubscribe = expensesRef
+            .where('userId', '==', currentUser.uid)
+            .orderBy('createdAt', 'desc')
+            .limit(3)
+            .onSnapshot((querySnapshot) => {
+              const transactions = [];
+              querySnapshot.forEach((doc) => {
+                const { description, price, category } = doc.data();
+                transactions.push({
+                  id: doc.id,
+                  description,
+                  price,
+                  category,
+                });
+              });
+              setTransactions(transactions);
+            });
+    
+          return () => unsubscribe();
+        }
+      }, [currentUser]);
+    
       return (
-        <ScrollView style={{ flex:1 }}>
+        <ScrollView style={{ flex: 1 }}>
+          {/* Transaction History header */}
           <TouchableOpacity
             style={{
               flexDirection: 'row',
@@ -188,28 +189,41 @@ const Home = () => {
             }}
             onPress={() => navigation.navigate('AllExpenses')}
           >
-            <Text style={{ marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>Transaction History</Text>
+            <Text style={{ marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>
+              Transaction History
+            </Text>
             <Text style={{ color: 'grey', marginRight: 15 }}>See more</Text>
           </TouchableOpacity>
-            
-          <FlatList
-            style={{height:'30%'}}
-            data={users}
-            numColumns={1}
-            renderItem={({item}) => (
-              <Pressable
-                style={styles.container}>
+    
+          {/* Conditional rendering based on transactions */}
+          {transactions.length === 0 ? (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
+                There are no past transactions.
+                {'\n'}
+                Start tracking your expenses!
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              style={{ height: '30%' }}
+              data={transactions}
+              numColumns={1}
+              renderItem={({ item }) => (
+                <Pressable style={styles.container}>
                   <View style={styles.contentContainer}>
                     <Text style={styles.category}>{item.category}</Text>
                     <Text style={styles.description}>{item.description}</Text>
                   </View>
                   <Text style={styles.price}>${item.price}</Text>
-              </Pressable>
-            )}
-          />
+                </Pressable>
+              )}
+            />
+          )}
         </ScrollView>
-      )
+      );
     }
+    
 
     function renderAnalytics() {
       return (
@@ -230,7 +244,7 @@ const Home = () => {
       )
     }
     
-    function bottomPanel() {
+    function BottomPanel() {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <TouchableOpacity
@@ -343,14 +357,14 @@ const Home = () => {
     
   return (
     <SafeAreaProvider>
-      <SafeAreaView>
-        <ScrollView>
-          {renderHeader()}
+      <SafeAreaView style={{ flex: 1 }}>
+        {renderHeader()}
+        <ScrollView style={{ flex: 1 }}>
           {renderFeatures()}
           {renderTransactionHistory()}
           {renderAnalytics()}
-          {bottomPanel()}
         </ScrollView>
+        <BottomPanel />
       </SafeAreaView>
     </SafeAreaProvider>
   );
