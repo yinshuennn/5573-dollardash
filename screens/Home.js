@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
-import group from '../assets/icons/group.png';
+import income from '../assets/icons/income.png';
 import bill from '../assets/icons/bill.png';
 import budget from '../assets/icons/budget.png';
 import { Pressable } from 'react-native';
@@ -22,6 +22,10 @@ const Home = () => {
   }
 
   const handleGroups = () => {
+    navigation.navigate('Income');
+  }
+
+  const handleIncome = () => {
     navigation.navigate('Income');
   }
 
@@ -70,11 +74,11 @@ const Home = () => {
   const featuresData = [
     {
         id: 1,
-        icon: group,
+        icon: income,
         color: '0D0E0F',
         backgroundColor: '#FEFFBD',
-        description: handleGroups,
-        description2: 'Groups',
+        description: handleIncome,
+        description2: 'Income',
     },
     {
         id: 2,
@@ -209,7 +213,7 @@ const Home = () => {
 
     function renderAnalytics() {
       return (
-          <View style={{ margin: 20 }}>
+          <View style={{ margin: 20, marginBottom: 0 }}>
               <TouchableOpacity
                   style={{
                       height: 60,
@@ -226,7 +230,6 @@ const Home = () => {
       )
     }
     
-
     function bottomPanel() {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -297,10 +300,10 @@ const Home = () => {
             flexDirection: 'column',
             alignItems: "center",
           }}
-          onPress={handleGroups}
+          onPress={handleBudget}
         >
             <Image
-              source={require('../assets/images/groups.png')}
+              source={require('../assets/icons/budget.png')}
               resizeMode="contain"
               style={{
                 width: 30,
@@ -310,7 +313,7 @@ const Home = () => {
                 marginTop: 25,
               }}
             />
-            <Text style={{ marginLeft: 20, marginTop: 5 }}>Groups</Text>
+            <Text style={{ marginLeft: 20, marginTop: 5 }}>Budget</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

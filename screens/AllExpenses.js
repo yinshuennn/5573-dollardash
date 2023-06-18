@@ -125,116 +125,116 @@ const AllExpenses = () => {
     )
   }
 
-    function bottomPanel() {
-      return (
-        <View style={{ marginTop: 375, flexDirection: 'row', justifyContent: 'space-around' }}>
-          <TouchableOpacity
-          style={{
-            flexDirection: 'column',
-            alignItems: "center",
-          }}
-          onPress={() => console.log("Home")}
-        >
-            <Image
-              source={require('../assets/images/home(main).png')}
-              resizeMode="contain"
-              style={{
-                width: 30,
-                height: 30,
-                tintColor: '#A7A7A7',
-                marginLeft: 10,
-                marginTop: 25,
-              }}
-            />
-            <Text style={{ marginLeft: 10, marginTop: 5 }}>Home</Text>
-          </TouchableOpacity>
+  function bottomPanel() {
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+        <TouchableOpacity
+        style={{
+          flexDirection: 'column',
+          alignItems: "center",
+        }}
+        onPress={() => console.log("Home")}
+      >
+          <Image
+            source={require('../assets/images/home(main).png')}
+            resizeMode="contain"
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: '#646B73',
+              marginLeft: 10,
+              marginTop: 25,
+            }}
+          />
+          <Text style={{ marginLeft: 10, marginTop: 5 }}>Home</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-          style={{
-            flexDirection: 'column',
-            alignItems: "center",
-          }}
-          onPress={handleTransactionHistory}
-        >
-            <Image
-              source={require('../assets/images/transaction.png')}
-              resizeMode="contain"
-              style={{
-                width: 30,
-                height: 30,
-                tintColor: '#646B73',
-                marginLeft:15,
-                marginTop: 25,
-              }}
-            />
-            <Text style={{ marginLeft: 10, marginTop: 5 }}>Transaction</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+        style={{
+          flexDirection: 'column',
+          alignItems: "center",
+        }}
+        onPress={handleTransactionHistory}
+      >
+          <Image
+            source={require('../assets/images/transaction.png')}
+            resizeMode="contain"
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: '#A7A7A7',
+              marginLeft:15,
+              marginTop: 25,
+            }}
+          />
+          <Text style={{ marginLeft: 10, marginTop: 5 }}>Transaction</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            alignItems: "center",
-          }}
-          onPress={handleAddExpense}
-        >
-            <Image
-              source={require('../assets/images/add.png')}
-              resizeMode="contain"
-              style={{
-                width: 55,
-                height: 55,
-                tintColor: '#646B73',
-                marginLeft: 10,
-                marginTop: 25,
-              }}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: "center",
+        }}
+        onPress={handleAddExpense}
+      >
+          <Image
+            source={require('../assets/images/add.png')}
+            resizeMode="contain"
+            style={{
+              width: 55,
+              height: 55,
+              tintColor: '#646B73',
+              marginLeft: 10,
+              marginTop: 25,
+            }}
+          />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-          style={{
-            flexDirection: 'column',
-            alignItems: "center",
-          }}
-          onPress={handleGroups}
-        >
-            <Image
-              source={require('../assets/images/groups.png')}
-              resizeMode="contain"
-              style={{
-                width: 30,
-                height: 30,
-                tintColor: '#A7A7A7',
-                marginLeft: 25,
-                marginTop: 25,
-              }}
-            />
-            <Text style={{ marginLeft: 20, marginTop: 5 }}>Groups</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+        style={{
+          flexDirection: 'column',
+          alignItems: "center",
+        }}
+        onPress={handleBudget}
+      >
+          <Image
+            source={require('../assets/icons/budget.png')}
+            resizeMode="contain"
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: '#A7A7A7',
+              marginLeft: 25,
+              marginTop: 25,
+            }}
+          />
+          <Text style={{ marginLeft: 20, marginTop: 5 }}>Budget</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-          style={{
-            flexDirection: 'column',
-            alignItems: "center",
-          }}
-          onPress={handleProfile}
-        >
-            <Image
-              source={require('../assets/images/profile.png')}
-              resizeMode="contain"
-              style={{
-                width: 30,
-                height: 30,
-                tintColor: '#A7A7A7',
-                marginLeft: 25,
-                marginRight: 10,
-                marginTop: 25,
-              }}
-            />
-            <Text style={{ marginLeft: 10, marginTop: 5 }}>Profile</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
+        <TouchableOpacity
+        style={{
+          flexDirection: 'column',
+          alignItems: "center",
+        }}
+        onPress={handleProfile}
+      >
+          <Image
+            source={require('../assets/images/profile.png')}
+            resizeMode="contain"
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: '#A7A7A7',
+              marginLeft: 25,
+              marginRight: 10,
+              marginTop: 25,
+            }}
+          />
+          <Text style={{ marginLeft: 10, marginTop: 5 }}>Profile</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
     
   return (
     <SafeAreaProvider>
