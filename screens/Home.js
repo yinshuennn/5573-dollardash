@@ -1,26 +1,47 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TextInput, Linking } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/core';
-import { auth } from '../firebase';
-
-const Welcome = () => {
+import group from '../assets/icons/group.png';
+import bill from '../assets/icons/bill.png';
+import budget from '../assets/icons/budget.png';
+import { Pressable } from 'react-native';
+import { firebase } from '../firebase';
+const Home = () => {
 
   const handleBack = () => {
     navigation.navigate('Login');
   };
 
-  const navigation = useNavigation()
+  const handleProfile = () => {
+    navigation.navigate('Profile');
+  };
 
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login")
-      })
-      .catch(error => alert(error.message))
+  const handleAddExpense = () => {
+    navigation.navigate('AddNewExpense');
   }
+
+  const handleGroups = () => {
+    navigation.navigate('Income');
+  }
+
+  const handleBills = () => {
+    navigation.navigate('Groups');
+  }
+
+  const handleBudget = () => {
+    navigation.navigate('Budget');
+  }
+
+  const handleTransactionHistory = () => {
+    navigation.navigate('AllExpenses');
+  }
+
+  const handlePie = () => {
+    navigation.navigate('Pie');
+  }
+
+  const navigation = useNavigation()
 
   function renderHeader() {
     return (
@@ -42,48 +63,290 @@ const Welcome = () => {
                     marginTop: 25
                 }}
             />
-
-            <Text style={{ marginTop: 25, marginLeft: 120, color: 'black', fontSize: 16 }}>Home</Text>
         </TouchableOpacity>
     )
   }
 
-    function renderText() {
-        return (
-        <View style={styles.container}>
-        <Text style={ [styles.first, { textAlign: 'center'}] }>
-            Hi, welcome to DollarDash!
-        </Text>
-        </View>
-        );
-    }
+  const featuresData = [
+    {
+        id: 1,
+        icon: group,
+        color: '0D0E0F',
+        backgroundColor: '#FEFFBD',
+        description: handleGroups,
+        description2: 'Groups',
+    },
+    {
+        id: 2,
+        icon: bill,
+        color: '0D0E0F',
+        backgroundColor: '#B8CFCE',
+        description: handleBills,
+        description2: 'Bills',
+    },
+    {
+        id: 3,
+        icon: budget,
+        color: '0D0E0F',
+        backgroundColor: '#EBD3F3',
+        description: handleBudget,
+        description2: 'Budget',
+    },
+]
 
-    function renderSignOut() {
-      return (
-        <View style={ {margin: 40} }>
-          <TouchableOpacity
-            onPress={handleSignOut}
+    const [features, setFeatures] = React.useState(featuresData)
+
+    function renderFeatures() {
+      const Header = () => (
+        <View style={{ marginTop: 30, marginBottom: 16, marginLeft: 25 }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>At a glance</Text>
+        </View>
+      );
+    
+      const renderItem = ({ item }) => (
+        <TouchableOpacity
+          style={{ marginBottom: 16, width: 130, alignItems: 'center' }}
+          onPress={item.description}
+        >
+          <View
             style={{
-              height: 60,
-              backgroundColor: '#646B73',
-              borderRadius: 20,
+              height: 80,
+              width: 90,
+              marginBottom: 5,
+              borderRadius: 10,
+              backgroundColor: item.backgroundColor,
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
-            <Text style={ {color: '#FCFCFC', fontSize: 16} }>Sign out</Text>
-          </TouchableOpacity>
+            <Image
+              source={item.icon}
+              resizeMode="contain"
+              style={{
+                height: 30,
+                width: 35,
+              }}
+            />
+
+            <Text style={{ textAlign: 'center', flexWrap: 'wrap', fontSize: 14, marginTop: 8 }}>{item.description2}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    
+      return (
+        <View style={{ marginBottom: 0 }}>
+          <Header />
+          <FlatList
+            data={featuresData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
+      );
+    }
+
+    function renderTransactionHistory() {
+      const [users, setUsers] = useState([]);
+      const expensesRef = firebase.firestore().collection('Expenses');
+
+      useEffect(async () => {
+        expensesRef
+        .orderBy('createdAt', 'desc')
+        .limit(3)
+        .onSnapshot(
+          querySnapshot => {
+            const users = []
+            querySnapshot.forEach((doc) => {
+              const{ description, price, category } = doc.data()
+              users.push({
+                id: doc.id,
+                description,
+                price,
+                category,
+              })
+            })
+            setUsers(users)
+          }
+        )
+      }, [])
+
+      return (
+        <ScrollView style={{ flex:1 }}>
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 16,
+              marginTop: 10,
+            }}
+            onPress={() => navigation.navigate('AllExpenses')}
+          >
+            <Text style={{ marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>Transaction History</Text>
+            <Text style={{ color: 'grey', marginRight: 15 }}>See more</Text>
+          </TouchableOpacity>
+            
+          <FlatList
+            style={{height:'30%'}}
+            data={users}
+            numColumns={1}
+            renderItem={({item}) => (
+              <Pressable
+                style={styles.container}>
+                  <View style={styles.contentContainer}>
+                    <Text style={styles.category}>{item.category}</Text>
+                    <Text style={styles.description}>{item.description}</Text>
+                  </View>
+                  <Text style={styles.price}>${item.price}</Text>
+              </Pressable>
+            )}
+          />
+        </ScrollView>
       )
     }
 
+    function renderAnalytics() {
+      return (
+          <View style={{ margin: 20 }}>
+              <TouchableOpacity
+                  style={{
+                      height: 60,
+                      backgroundColor: '#646B73',
+                      borderRadius: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                  }}
+                  onPress={handlePie}
+              >
+                  <Text style={{ color: '#FCFCFC', fontSize: 16, fontWeight: 'bold' }}>View Analytics</Text>
+              </TouchableOpacity>
+          </View>
+      )
+    }
+    
+
+    function bottomPanel() {
+      return (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            alignItems: "center",
+          }}
+          onPress={() => console.log("Home")}
+        >
+            <Image
+              source={require('../assets/images/home(main).png')}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#646B73',
+                marginLeft: 10,
+                marginTop: 25,
+              }}
+            />
+            <Text style={{ marginLeft: 10, marginTop: 5 }}>Home</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            alignItems: "center",
+          }}
+          onPress={handleTransactionHistory}
+        >
+            <Image
+              source={require('../assets/images/transaction.png')}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#A7A7A7',
+                marginLeft:15,
+                marginTop: 25,
+              }}
+            />
+            <Text style={{ marginLeft: 10, marginTop: 5 }}>Transaction</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            alignItems: "center",
+          }}
+          onPress={handleAddExpense}
+        >
+            <Image
+              source={require('../assets/images/add.png')}
+              resizeMode="contain"
+              style={{
+                width: 55,
+                height: 55,
+                tintColor: '#646B73',
+                marginLeft: 10,
+                marginTop: 25,
+              }}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            alignItems: "center",
+          }}
+          onPress={handleGroups}
+        >
+            <Image
+              source={require('../assets/images/groups.png')}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#A7A7A7',
+                marginLeft: 25,
+                marginTop: 25,
+              }}
+            />
+            <Text style={{ marginLeft: 20, marginTop: 5 }}>Groups</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            alignItems: "center",
+          }}
+          onPress={handleProfile}
+        >
+            <Image
+              source={require('../assets/images/profile.png')}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#A7A7A7',
+                marginLeft: 25,
+                marginRight: 10,
+                marginTop: 25,
+              }}
+            />
+            <Text style={{ marginLeft: 10, marginTop: 5 }}>Profile</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    
   return (
     <SafeAreaProvider>
       <SafeAreaView>
         <ScrollView>
           {renderHeader()}
-          {renderText()}
-          {renderSignOut()}
+          {renderFeatures()}
+          {renderTransactionHistory()}
+          {renderAnalytics()}
+          {bottomPanel()}
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -91,17 +354,45 @@ const Welcome = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
   first: {
     fontSize: 15,
     marginTop: 50, 
     fontWeight: 'bold',
     fontSize: 25,
   },
+  container: {
+    backgroundColor:'#e5e5e5',
+    padding: 15,
+    borderRadius: 10,
+    margin: 5,
+    marginHorizontal: 25,
+  },
+  innerContainer: {
+    alignItems:'center',
+    flexDirection:'column', 
+  },
+  category: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    marginLeft: 5,
+  },
+  description: {
+    fontSize: 14,
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    marginLeft: 5,
+  },
+  price: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
+    marginTop: 8,
+  },
+  contentContainer: {
+    flex: 1,
+    marginRight: 16,
+  },
 });
 
-export default Welcome;
+export default Home;
