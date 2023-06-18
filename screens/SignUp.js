@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TextInput, Linking } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { CheckBox } from 'react-native-elements';
@@ -6,19 +6,26 @@ import { StatusBar } from 'expo-status-bar';
 import disableEye from '../assets/icons/disable_eye.png';
 import eye from '../assets/icons/eye.png';
 import { useNavigation } from '@react-navigation/core'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 
 const SignUp = () => {
 
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [agree, setAgree] = React.useState(false);
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false);
+  const [agree, setAgree] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isFormComplete, setIsFormComplete] = useState(false); // Track form completion
 
-  const navigation = useNavigation()
-  
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    // Check if all form fields are filled
+    setIsFormComplete(name !== '' && email !== '' && password !== '' && agree);
+  }, [name, email, password, agree]);
+
   const handleBack = () => {
-    navigation.replace("Launch")
+    navigation.navigate('Launch');
   };
 
   const handleLogin = () => {
@@ -30,15 +37,33 @@ const SignUp = () => {
       .createUserWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
+        saveUserNameToFirebase(user.uid, name);
         console.log('Registered with:', user.email);
       })
       .catch(error => alert(error.message))
-  }
+  };
+
+  const saveUserNameToFirebase = (userId, userName) => {
+    db.collection('users').doc(userId).set({
+      name: userName
+    })
+    .then(() => {
+      console.log('User name saved to Firebase successfully');
+    })
+    .catch(error => {
+      console.error('Error saving user name to Firebase:', error);
+    });
+  };
   
   const handleTandC = () => {
     const url = 'https://docs.google.com/document/d/1Exe9C7DKJF1SQjJcJEZbetjcwKWOQDIFlMkUsRzEGRY/edit?usp=sharing'; 
     Linking.openURL(url);
-  }; 
+  };
+
+  const handleGoogleLogin = () => {
+    const url = 'https://accounts.google.com/';
+    Linking.openURL(url);
+  };  
 
   function renderHeader() {
     return (
@@ -86,6 +111,8 @@ const SignUp = () => {
               fontSize: 16
             }}
             placeholder="Name"
+            value={name}
+            onChangeText={text => setName(text)}
             placeholderTextColor='#91919F'
             selectionColor='#91919F'
           />
@@ -110,16 +137,16 @@ const SignUp = () => {
           />
         </View>
 
-      {/* Password */}
-      <View style={{ marginTop: 20 }}>
-        <TextInput
+        {/* Password */}
+        <View style={{ marginTop: 20 }}>
+          <TextInput
             style={{
-                marginVertical: 10,
-                borderBottomColor: '#91919F',
-                borderBottomWidth: 1,
-                height: 40,
-                color: '#91919F',
-                fontSize: 16
+              marginVertical: 10,
+              borderBottomColor: '#91919F',
+              borderBottomWidth: 1,
+              height: 40,
+              color: '#91919F',
+              fontSize: 16
             }}
             placeholder="Password"
             value={password}
@@ -127,34 +154,34 @@ const SignUp = () => {
             placeholderTextColor='#91919F'
             selectionColor='#91919F'
             secureTextEntry={!showPassword}
-        />
-        <TouchableOpacity
+          />
+          <TouchableOpacity
             style={{
-                position: 'absolute',
-                right: 0,
-                bottom: 10,
-                height: 30,
-                width: 30
+              position: 'absolute',
+              right: 0,
+              bottom: 10,
+              height: 30,
+              width: 30
             }}
             onPress={() => setShowPassword(!showPassword)}
-        >
+          >
             <Image
-                source={showPassword ? disableEye : eye}
-                style={{
-                    height: 20,
-                    width: 20,
-                    tintColor: '#91919F'
-                }}
+              source={showPassword ? disableEye : eye}
+              style={{
+                height: 20,
+                width: 20,
+                tintColor: '#91919F'
+              }}
             />
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     );
   }
 
   function renderBox() {
     return (
-      <View style={ { alignItems: 'center', justifyContent: 'flex-start', marginRight: 70, marginLeft: 50 } }>
+      <View style={{ alignItems: 'center', justifyContent: 'flex-start', marginRight: 70, marginLeft: 50 }}>
         <View style={styles.checkboxContainer}>
           <CheckBox
             checked={agree}
@@ -162,11 +189,11 @@ const SignUp = () => {
             containerStyle={styles.checkbox}
             checkedColor='black'
           />
-  
+
           <Text style={styles.label}>
-          By continuing, you accept our{' '}
+            By continuing, you accept our{' '}
             <Text style={[styles.link, { textDecorationLine: 'underline' }]} onPress={handleTandC}>
-            Terms of Service and Privacy Policy
+              Terms of Service and Privacy Policy
             </Text>
             ?
           </Text>
@@ -174,41 +201,41 @@ const SignUp = () => {
       </View>
     );
   }
-  
+
   function renderSignUp() {
     return (
-        <View style={ {margin: 10, marginLeft: 30, marginRight: 30} }>
-            <TouchableOpacity
-                style={{
-                    height: 60,
-                    backgroundColor: '#646B73',
-                    borderRadius: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                onPress={handleSignUp}
-            >
-                <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Sign Up</Text>
-            </TouchableOpacity>
+      <View style={{ margin: 10, marginLeft: 30, marginRight: 30 }}>
+        <TouchableOpacity
+          style={{
+            height: 60,
+            backgroundColor: isFormComplete ? '#646B73' : '#C0C0C0', // Enable/disable button based on form completion
+            borderRadius: 20,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onPress={() => {
+            handleSignUp();
+            navigation.navigate("Income");
+          }}
+          disabled={!isFormComplete} // Disable the button when form is incomplete
+        >
+          <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Sign Up</Text>
+        </TouchableOpacity>
 
-            <Text style={ {margin:15, textAlign: 'center'} }>Or</Text>
-        </View>
-        
+        <Text style={{ margin: 15, textAlign: 'center' }}>Or</Text>
+      </View>
     )
   }
 
-  /*
   function renderGoogle() {
     return (
-      <TouchableOpacity 
-        onPress={() => console.log('Signed in with Google!')}
-      >
+      <TouchableOpacity onPress={handleGoogleLogin}>
         <View style={{
           alignItems: 'center',
           marginTop: -20,
         }}>
           <Image
-            style={{width: 40, height: 40}}
+            style={{ width: 40, height: 40 }}
             source={require('../assets/images/google.png')}
           />
           <StatusBar style="auto" />
@@ -216,20 +243,18 @@ const SignUp = () => {
       </TouchableOpacity>
     );
   }
-  */
-
 
   function renderAccount() {
     return (
-      <Text style={ [styles.label, { margin: 10, textAlign: 'center'}] }>
-          Already have an account?{' '}
-            <Text 
-              style={[styles.link, { textDecorationLine: 'underline' }]}
-              onPress={handleLogin}>
-            Login
-            </Text>
-            ?
-          </Text>
+      <Text style={[styles.label, { margin: 10, textAlign: 'center' }]}>
+        Already have an account?{' '}
+        <Text
+          style={[styles.link, { textDecorationLine: 'underline' }]}
+          onPress={handleLogin}>
+          Login
+        </Text>
+        ?
+      </Text>
     );
   }
 
@@ -241,6 +266,7 @@ const SignUp = () => {
           {renderForm()}
           {renderBox()}
           {renderSignUp()}
+          {renderGoogle()}
           {renderAccount()}
         </ScrollView>
       </SafeAreaView>
@@ -258,20 +284,19 @@ const styles = StyleSheet.create({
 
   checkboxContainer: {
     flexDirection: 'row',
-    alignItems: 'center',  // Align items vertically in the middle
+    alignItems: 'center',
     marginBottom: 20,
   },
 
   checkbox: {
     alignSelf: 'center',
-    marginRight: 8,  // Add margin between checkbox and label
+    marginRight: 8, 
   },
 
   label: {
     fontSize: 12,
-    marginLeft: 0,  // Add margin between checkbox and label
+    marginLeft: 0, 
   },
-
 });
 
 export default SignUp;
