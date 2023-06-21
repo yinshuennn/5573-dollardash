@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
@@ -7,33 +7,36 @@ import { firebase } from '../firebase';
 
 const AddNewExpense = () => {
   const todoRef = firebase.firestore().collection('Expenses');
+
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const navigation = useNavigation();
-  const { currentUser } = useContext(AuthContext); // Assuming you have an AuthContext for managing user authentication
 
   const categories = [
-    { key: '1', value: 'Food' },
-    { key: '2', value: 'Transportation' },
-    { key: '3', value: 'Entertainment' },
-    { key: '5', value: 'Shopping' },
-    { key: '7', value: 'Utilities' },
+    {key:'1', value:'Food'},
+    {key:'2', value:'Transportation'},
+    {key:'3', value:'Entertainment'},
+    {key:'5', value:'Shopping'},
+    {key:'7', value:'Utilities'},
   ];
+
+  const navigation = useNavigation();
 
   const handleBack = () => {
     navigation.navigate('Home');
   };
 
   const addField = () => {
-    if (description && price && category && description.length > 0 && price.length > 0 && category.length > 0) {
+    if (description && price && category && 
+      description.length > 0 && price.length > 0 && category.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const userId = firebase.auth().currentUser.uid; // Retrieve the current user's ID
       const data = {
         description: description,
         price: price,
         category: category,
         createdAt: timestamp,
-        userId: currentUser.uid, // Use the current user's ID
+        userId: userId // Add the user ID to the expense data
       };
       todoRef
         .add(data)
@@ -51,14 +54,14 @@ const AddNewExpense = () => {
     } else {
       Alert.alert('Please fill in all fields');
     }
-  };
-
+  }
+  
   function renderHeader() {
     return (
       <TouchableOpacity
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItems: "center",
         }}
         onPress={handleBack}
       >
@@ -70,7 +73,7 @@ const AddNewExpense = () => {
             height: 20,
             tintColor: 'white',
             marginLeft: 25,
-            marginTop: 25,
+            marginTop: 25
           }}
         />
         <Text style={styles.text}>New Expense</Text>
@@ -97,9 +100,9 @@ const AddNewExpense = () => {
           placeholderTextColor="white"
           onChangeText={(text) => setDescription(text)}
           value={description}
-          selectionColor="#91919F"
+          selectionColor='#91919F'
         />
-
+        
         <SelectList
           setSelected={(category) => setCategory(category)}
           data={categories}
@@ -109,7 +112,7 @@ const AddNewExpense = () => {
           placeholderStyle={styles.buttonText}
           placeholder="Choose a Category"
         />
-
+        
         <TouchableOpacity style={styles.button} onPress={addField}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
@@ -127,7 +130,7 @@ const AddNewExpense = () => {
       </SafeAreaView>
     </SafeAreaProvider>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -139,9 +142,10 @@ const styles = StyleSheet.create({
     marginLeft: 100,
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   text1: {
+    // marginTop: 25,
     marginLeft: 0,
     marginBottom: 10,
     color: 'white',
@@ -158,6 +162,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   button: {
+    // backgroundColor: '#646B73',
     backgroundColor: '#EAEAEA',
     paddingVertical: 12,
     paddingHorizontal: 20,

@@ -35,7 +35,7 @@ const Login = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
-        // navigation.replace('Home');
+        navigation.navigate('SignUp');
       })
       .catch(error => alert(error.message))
   }
