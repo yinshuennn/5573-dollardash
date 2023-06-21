@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 import { firebase } from '../firebase';
 
+
 const Income = () => {
   const todoRef = firebase.firestore().collection('Income');
 
@@ -15,6 +16,28 @@ const Income = () => {
     navigation.navigate('Home');
   };
 
+  // const addField = () => {
+  //   if (income && income.length > 0) {
+  //     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  //     const data = {
+  //       income: income,
+  //       createdAt: timestamp
+  //     };
+  //     todoRef
+  //       .add(data)
+  //       .then(() => {
+  //         setIncome('');
+  //         Keyboard.dismiss()
+  //       })
+  //       .catch((error) => {
+  //         alert(error);
+  //       });
+  //     navigation.navigate('Budget');
+  //     Alert.alert('Income added!');
+  //   } else {
+  //     Alert.alert('Please input your income!');
+  //   }
+  // }
   const addField = () => {
     if (income && income.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -31,12 +54,13 @@ const Income = () => {
         .catch((error) => {
           alert(error);
         });
-      navigation.navigate('Budget');
       Alert.alert('Income added!');
+      navigation.navigate('Budget'); // Navigate to the budget page
     } else {
       Alert.alert('Please input your income!');
     }
-  }
+  };
+  
   
   function renderHeader() {
     return (

@@ -20,7 +20,6 @@ const SignUp = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Check if all form fields are filled
     setIsFormComplete(name !== '' && email !== '' && password !== '' && agree);
   }, [name, email, password, agree]);
 
@@ -39,10 +38,11 @@ const SignUp = () => {
         const user = userCredentials.user;
         saveUserNameToFirebase(user.uid, name);
         console.log('Registered with:', user.email);
+        navigation.navigate('Income', { isSigningUp: true }); // Navigate to the income page with the parameter
       })
       .catch(error => alert(error.message))
   };
-
+  
   const saveUserNameToFirebase = (userId, userName) => {
     db.collection('users').doc(userId).set({
       name: userName

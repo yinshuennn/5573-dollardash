@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
-import group from '../assets/icons/group.png';
-import bill from '../assets/icons/bill.png';
-import budget from '../assets/icons/budget.png';
 import { Pressable } from 'react-native';
-import { firebase } from '../firebase';
+import { firebase, auth } from '../firebase';
 
 const AllExpenses = () => {
 
@@ -68,32 +65,36 @@ const AllExpenses = () => {
   }
 
   function renderTransactionHistory() {
-    const [users, setUsers] = useState([]);
+    const [transactions, setTransactions] = useState([]);
     const expensesRef = firebase.firestore().collection('Expenses');
-
-    useEffect(async () => {
-      expensesRef
-      .orderBy('createdAt', 'desc')
-      .limit(3)
-      .onSnapshot(
-        querySnapshot => {
-          const users = []
-          querySnapshot.forEach((doc) => {
-            const{ description, price, category } = doc.data()
-            users.push({
-              id: doc.id,
-              description,
-              price,
-              category,
-            })
-          })
-          setUsers(users)
-        }
-      )
-    }, [])
-
+    const currentUser = auth.currentUser;
+  
+    useEffect(() => {
+      if (currentUser) {
+        const unsubscribe = expensesRef
+          .where('userId', '==', currentUser.uid)
+          .orderBy('createdAt', 'desc')
+          .onSnapshot((querySnapshot) => {
+            const transactions = [];
+            querySnapshot.forEach((doc) => {
+              const { description, price, category } = doc.data();
+              transactions.push({
+                id: doc.id,
+                description,
+                price,
+                category,
+              });
+            });
+            setTransactions(transactions);
+          });
+  
+        return () => unsubscribe();
+      }
+    }, [currentUser]);
+  
     return (
-      <ScrollView style={{ flex:1, marginBottom: 10 }}>
+      <ScrollView style={{ flex: 1 }}>
+        {/* Transaction History header */}
         <TouchableOpacity
           style={{
             flexDirection: 'row',
@@ -102,27 +103,41 @@ const AllExpenses = () => {
             paddingHorizontal: 16,
             marginTop: 10,
           }}
-          onPress={handleTransactionHistory}
+          onPress={() => navigation.navigate('AllExpenses')}
         >
+          <Text style={{ marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>
+            Transaction History
+          </Text>
+          <Text style={{ color: 'grey', marginRight: 15 }}>See more</Text>
         </TouchableOpacity>
-          
-        <FlatList
-          style={{height:'60%'}}
-          data={users}
-          numColumns={1}
-          renderItem={({item}) => (
-            <Pressable
-              style={styles.container}>
+  
+        {/* Conditional rendering based on transactions */}
+        {transactions.length === 0 ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
+              There are no past transactions.
+              {'\n'}
+              Start tracking your expenses!
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            style={{ height: '30%' }}
+            data={transactions}
+            numColumns={1}
+            renderItem={({ item }) => (
+              <Pressable style={styles.container}>
                 <View style={styles.contentContainer}>
                   <Text style={styles.category}>{item.category}</Text>
                   <Text style={styles.description}>{item.description}</Text>
                 </View>
                 <Text style={styles.price}>${item.price}</Text>
-            </Pressable>
-          )}
-        />
+              </Pressable>
+            )}
+          />
+        )}
       </ScrollView>
-    )
+    );
   }
 
   function BottomPanel() {

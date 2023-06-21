@@ -39,14 +39,18 @@ const Pie = ({ navigation }) => {
 
   const TestChart = () => {
     const [expenses, setExpenses] = useState([]);
-  
+
     useEffect(() => {
-      const expensesRef = firebase.firestore().collection('Expenses');
-  
-      expensesRef
-        .orderBy('createdAt', 'desc')
-        .limit(3)
-        .onSnapshot((querySnapshot) => {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const expensesRef = firebase
+          .firestore()
+          .collection('Expenses')
+          .where('userId', '==', user.uid)
+          .orderBy('createdAt', 'desc')
+          .limit(3);
+
+        const unsubscribe = expensesRef.onSnapshot((querySnapshot) => {
           const expensesData = [];
           querySnapshot.forEach((doc) => {
             const { description, price, category } = doc.data();
@@ -59,12 +63,13 @@ const Pie = ({ navigation }) => {
           });
           setExpenses(expensesData);
         });
-  
-      return () => expensesRef(); // Cleanup the snapshot listener
+
+        return () => unsubscribe();
+      }
     }, []);
-  
+
     const widthAndHeight = 250;
-  
+
     if (expenses.length === 0) {
       return (
         <View style={styles.container}>

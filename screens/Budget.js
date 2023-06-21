@@ -22,7 +22,7 @@ const Budget = () => {
   const navigation = useNavigation();
 
   const handleBack = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Income');
   };
 
   const addField = () => {

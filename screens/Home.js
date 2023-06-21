@@ -6,11 +6,11 @@ import income from '../assets/icons/income.png';
 import bill from '../assets/icons/bill.png';
 import budget from '../assets/icons/budget.png';
 import { Pressable } from 'react-native';
-import { firebase, auth, db } from '../firebase';
+import { firebase, auth } from '../firebase';
 const Home = () => {
 
   const handleBack = () => {
-    navigation.navigate('Login');
+    navigation.navigate('Home');
   };
 
   const handleProfile = () => {
@@ -198,7 +198,7 @@ const Home = () => {
           {/* Conditional rendering based on transactions */}
           {transactions.length === 0 ? (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
+              <Text style={{ marginTop: 20, marginBottom: 15, fontSize: 12, color: 'grey' }}>
                 There are no past transactions.
                 {'\n'}
                 Start tracking your expenses!
@@ -227,7 +227,7 @@ const Home = () => {
 
     function renderAnalytics() {
       return (
-          <View style={{ margin: 20, marginBottom: 0 }}>
+          <View style={{ margin: 20, marginTop: 10, marginBottom: 0 }}>
               <TouchableOpacity
                   style={{
                       height: 60,
