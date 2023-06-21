@@ -198,7 +198,7 @@ const Profile = () => {
                             <Text style={[styles.title, {
                                 marginTop:15,
                                 marginBottom: 5,
-                            }]}>{userName}</Text>
+                            }]}>username</Text>
                             <Text style={styles.emailText}>{auth.currentUser?.email}</Text>
                         </View>
                     </View>
