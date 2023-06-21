@@ -65,7 +65,7 @@ const RepeatOptions = () => {
   }
 
   function renderMenu() {
-    const options = ['None', 'First day of every month', 'Last day of every month', 'Custom'];
+    const options = ['None', 'First day of every month', 'Last day of every month'];
 
     return (
       <View style={styles.container}>
