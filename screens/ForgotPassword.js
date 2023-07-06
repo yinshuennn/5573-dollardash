@@ -82,6 +82,7 @@ const ForgotPassword = ({ navigation }) => {
             <TouchableOpacity
                 style={{
                     height: 60,
+                    marginTop: -20,
                     backgroundColor: '#646B73',
                     borderRadius: 20,
                     alignItems: 'center',
