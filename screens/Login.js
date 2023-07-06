@@ -69,7 +69,7 @@ const Login = () => {
                 }}
             />
 
-            <Text style={{ marginTop: 25, marginLeft: 120, color: 'black', fontSize: 16 }}>Login</Text>
+            <Text style={{ marginTop: 25, marginLeft: 125, color: 'black', fontSize: 16 }}>Login</Text>
         </TouchableOpacity>
     )
   }
