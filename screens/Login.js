@@ -164,7 +164,7 @@ const Login = () => {
 
   function renderForget() {
     return (
-      <View style={{ marginHorizontal: 60, marginTop: -30 }}>
+      <View style={{ marginHorizontal: 40, marginTop: -30 }}>
         <TouchableOpacity
           style={{
             height: 60,
