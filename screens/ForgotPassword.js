@@ -1,13 +1,30 @@
-import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
+import { auth } from '../firebase';
 
 const ForgotPassword = ({ navigation }) => {
+  const [email, setEmail] = useState('');
 
   const handleBack = () => {
     navigation.navigate('Login');
   };
+
+  const handleForgotPassword = () => {
+    if (email.trim() === '') {
+      Alert.alert('Error', 'Please enter your email.');
+      return;
+    }
+
+    auth.sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert('Password Reset Email Sent', 'An email has been sent to your email address with instructions to reset your password.');
+        navigation.navigate('SendEmail');
+    })
+      .catch((error) => {
+        Alert.alert('Error', 'Failed to send password reset email. Please check your email address and try again.');
+    });
+  }
 
   function renderHeader() {
     return (
@@ -30,7 +47,7 @@ const ForgotPassword = ({ navigation }) => {
                 }}
             />
 
-            <Text style={{ marginTop: 25, marginLeft: 120, color: 'black', fontSize: 16 }}>Forgot Password</Text>
+            <Text style={{ marginTop: 25, marginLeft: 90, color: 'black', fontSize: 16 }}>Forgot Password</Text>
         </TouchableOpacity>
     )
   }
@@ -70,6 +87,8 @@ const ForgotPassword = ({ navigation }) => {
           placeholder="Email"
           placeholderTextColor='#91919F'
           selectionColor='#91919F'
+          onChangeText={text => setEmail(text)}
+          value={email}
         />
       </View>
     </View>
@@ -88,7 +107,7 @@ const ForgotPassword = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}
-                onPress={() => navigation.navigate("SendEmail")}
+                onPress={handleForgotPassword}
             >
                 <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Continue</Text>
             </TouchableOpacity>
