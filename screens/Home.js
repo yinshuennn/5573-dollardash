@@ -30,7 +30,7 @@ const Home = () => {
   }
 
   const handleBudget = () => {
-    navigation.navigate('Budget');
+    navigation.navigate('AllBudgets');
   }
 
   const handleTransactionHistory = () => {

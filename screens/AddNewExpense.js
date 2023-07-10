@@ -95,9 +95,15 @@ const AddNewExpense = () => {
         />
 
         <TextInput
-          style={styles.text1}
+          style={styles.text1, { backgroundColor: '#EAEAEA', 
+                                  marginLeft: -5, 
+                                  marginRight: 20, 
+                                  marginBottom: 10, 
+                                  paddingVertical: 12,
+                                  paddingHorizontal: 20, 
+                                  borderRadius: 6 }}
           placeholder="Description"
-          placeholderTextColor="white"
+          placeholderTextColor="black"
           onChangeText={(text) => setDescription(text)}
           value={description}
           selectionColor='#91919F'
