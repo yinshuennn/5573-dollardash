@@ -22,7 +22,7 @@ const Home = () => {
   }
 
   const handleIncome = () => {
-    navigation.navigate('Income');
+    navigation.navigate('Incomes');
   }
 
   const handleBills = () => {

@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 import { Pressable } from 'react-native';
 import { firebase, auth } from '../firebase';
+import { set } from 'react-native-reanimated';
 
 const AllExpenses = () => {
 
@@ -48,47 +49,33 @@ const AllExpenses = () => {
         }}
       >
         <Text style={{ marginTop: 25, color: 'black', fontSize: 16, fontWeight: 'bold' }}>
-          Transaction History
+          Income
         </Text>
       </TouchableOpacity>
     );
   }
   
 
-  function renderTransactionHistory() {
-    const [transactions, setTransactions] = useState([]);
-    const expensesRef = firebase.firestore().collection('Expenses');
+  function renderIncome() {
+    const [incomes, setIncome] = useState([]);
+    const incomeRef = firebase.firestore().collection('Income');
     const currentUser = auth.currentUser;
-
-    const deleteExpense = (expenseId) => {
-      expensesRef
-        .doc(expenseId)
-        .delete()
-        .then(() => {
-          console.log('Expense deleted successfully');
-        })
-        .catch((error) => {
-          console.error('Error deleting expense: ', error);
-        });
-    };
   
     useEffect(() => {
       if (currentUser) {
-        const unsubscribe = expensesRef
+        const unsubscribe = incomeRef
           .where('userId', '==', currentUser.uid)
           .orderBy('createdAt', 'desc')
           .onSnapshot((querySnapshot) => {
-            const transactions = [];
+            const incomes = [];
             querySnapshot.forEach((doc) => {
-              const { description, price, category } = doc.data();
-              transactions.push({
+              const { income } = doc.data();
+              incomes.push({
                 id: doc.id,
-                description,
-                price,
-                category,
+                income,
               });
             });
-            setTransactions(transactions);
+            setIncome(incomes);
           });
   
         return () => unsubscribe();
@@ -98,32 +85,23 @@ const AllExpenses = () => {
     return (
       <ScrollView style={{ flex: 1 }}>
         {/* Conditional rendering based on transactions */}
-        {transactions.length === 0 ? (
+        {incomes.length === 0 ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
-              There are no past transactions.
-              {'\n'}
-              Start tracking your expenses!
+              You have not added your income!
             </Text>
           </View>
         ) : (
           <FlatList
           style={{ height: '30%' }}
-          data={transactions}
+          data={incomes}
           numColumns={1}
           renderItem={({ item }) => (
             <View style={styles.container}>
               <View style={styles.contentContainer}>
-                <Text style={styles.category}>{item.category}</Text>
-                <Text style={styles.description}>{item.description}</Text>
+                <Text style={styles.category}>Income</Text>
               </View>
-              <Text style={styles.price}>${item.price}</Text>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => deleteExpense(item.id)}
-              >
-                <Text style={styles.deleteButtonText}>Delete</Text>
-              </TouchableOpacity>
+              <Text style={styles.price}>${item.income}</Text>
             </View>
           )}
         />
@@ -248,7 +226,7 @@ const AllExpenses = () => {
       <SafeAreaView style={{ flex: 1 }}>
         {renderHeader()}
         <ScrollView style={{ flex: 1 }}>
-          {renderTransactionHistory()}
+          {renderIncome()}
         </ScrollView>
         <BottomPanel />
       </SafeAreaView>
