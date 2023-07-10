@@ -17,6 +17,8 @@ import ChangePassword from './screens/ChangePassword';
 import Notifications from './screens/Notifications';
 import Groups from './screens/Groups';
 import AllExpenses from './screens/AllExpenses';
+import AllBudgets from './screens/AllBudgets';
+import Incomes from './screens/Incomes';
 import Pie from './screens/Pie';
 import Bills from './screens/Bills';
 import BillDetails from './screens/BillDetails';
@@ -51,8 +53,10 @@ export default function App() {
           <Stack.Screen options={{ headerShown: false }} name="BillDetails" component={BillDetails} />
           <Stack.Screen options={{ headerShown: false }} name="AddNewBill" component={AddNewBill} />
           <Stack.Screen options={{ headerShown: false }} name="RepeatOptions" component={RepeatOptions} />
+          <Stack.Screen options={{ headerShown: false }} name="Incomes" component={Incomes} />
+          <Stack.Screen options={{ headerShown: false }} name="AllBudgets" component={AllBudgets} />
         </Stack.Navigator>
       </NavigationContainer>  
-    </SelectedOptionProvider>     
+    </SelectedOptionProvider>
   );
 }
