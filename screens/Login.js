@@ -50,29 +50,30 @@ const Login = () => {
 
   function renderHeader() {
     return (
-        <TouchableOpacity
-            style={{
-                flexDirection: 'row',
-                alignItems: "center",
-            }}
-            onPress={handleBack}
-        >
-            <Image
-                source={require('../assets/icons/back.png')}
-                resizeMode="contain"
-                style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: 'black',
-                    marginLeft: 25,
-                    marginTop: 25
-                }}
-            />
-
-            <Text style={{ marginTop: 25, marginLeft: 120, color: 'black', fontSize: 16 }}>Login</Text>
-        </TouchableOpacity>
-    )
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+        onPress={handleBack}
+      >
+        <Image
+          source={require('../assets/icons/back.png')}
+          resizeMode="contain"
+          style={{
+            width: 20,
+            height: 20,
+            tintColor: 'black',
+            marginLeft: 25,
+            marginTop: 25,
+          }}
+        />
+  
+        <Text style={{ marginTop: 25, marginLeft: 150, color: 'black', fontSize: 16 }}>Login</Text>
+      </TouchableOpacity>
+    );
   }
+  
 
   function renderForm() {
     return (

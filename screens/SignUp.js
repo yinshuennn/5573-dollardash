@@ -222,7 +222,7 @@ const SignUp = () => {
           <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text style={{ margin: 15, textAlign: 'center' }}>Or</Text>
+        {/* <Text style={{ margin: 15, textAlign: 'center' }}>Or</Text> */}
       </View>
     )
   }
@@ -266,7 +266,6 @@ const SignUp = () => {
           {renderForm()}
           {renderBox()}
           {renderSignUp()}
-          {renderGoogle()}
           {renderAccount()}
         </ScrollView>
       </SafeAreaView>

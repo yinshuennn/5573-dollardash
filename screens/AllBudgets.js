@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Pressable } from 'react-native';
 import { firebase, auth } from '../firebase';
 
-const AllExpenses = () => {
+const AllBudgets = () => {
 
   const navigation = useNavigation()
 
@@ -19,14 +19,6 @@ const AllExpenses = () => {
 
   const handleAddExpense = () => {
     navigation.navigate('AddNewExpense');
-  }
-
-  const handleGroups = () => {
-    navigation.navigate('Groups');
-  }
-
-  const handleBills = () => {
-    navigation.navigate('Groups');
   }
 
   const handleBudget = () => {
@@ -44,39 +36,38 @@ const AllExpenses = () => {
           flexDirection: 'row',
           alignItems: 'center',
           marginBottom: 10,
-          justifyContent: 'center',
+          justifyContent: 'center', // Corrected "centre" to "center"
         }}
       >
         <Text style={{ marginTop: 25, color: 'black', fontSize: 16, fontWeight: 'bold' }}>
-          Transaction History
+          Budgets
         </Text>
       </TouchableOpacity>
     );
   }
   
 
-  function renderTransactionHistory() {
-    const [transactions, setTransactions] = useState([]);
-    const expensesRef = firebase.firestore().collection('Expenses');
+  function renderBudgetHistory() {
+    const [budgets, setBudgets] = useState([]);
+    const bugetsRef = firebase.firestore().collection('Budget');
     const currentUser = auth.currentUser;
   
     useEffect(() => {
       if (currentUser) {
-        const unsubscribe = expensesRef
+        const unsubscribe = bugetsRef
           .where('userId', '==', currentUser.uid)
           .orderBy('createdAt', 'desc')
           .onSnapshot((querySnapshot) => {
-            const transactions = [];
+            const bugets = [];
             querySnapshot.forEach((doc) => {
-              const { description, price, category } = doc.data();
-              transactions.push({
+              const { budget, category } = doc.data();
+              bugets.push({
                 id: doc.id,
-                description,
-                price,
+                budget,
                 category,
               });
             });
-            setTransactions(transactions);
+            setBudgets(budgets);
           });
   
         return () => unsubscribe();
@@ -86,12 +77,12 @@ const AllExpenses = () => {
     return (
       <ScrollView style={{ flex: 1 }}>
         {/* Conditional rendering based on transactions */}
-        {transactions.length === 0 ? (
+        {budgets.length === 0 ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
-              There are no past transactions.
+              There are no budgets set.
               {'\n'}
-              Start tracking your expenses!
+              Start budgeting now!
             </Text>
           </View>
         ) : (
@@ -102,10 +93,9 @@ const AllExpenses = () => {
             renderItem={({ item }) => (
               <Pressable style={styles.container}>
                 <View style={styles.contentContainer}>
-                  <Text style={styles.category}>{item.category}</Text>
                   <Text style={styles.description}>{item.description}</Text>
                 </View>
-                <Text style={styles.price}>${item.price}</Text>
+                <Text style={styles.price}>${item.budget}</Text>
               </Pressable>
             )}
           />
@@ -130,7 +120,7 @@ const AllExpenses = () => {
             style={{
               width: 30,
               height: 30,
-              tintColor: '#646B73',
+              tintColor: '#A7A7A7',
               marginLeft: 10,
               marginTop: 25,
             }}
@@ -192,7 +182,7 @@ const AllExpenses = () => {
             style={{
               width: 30,
               height: 30,
-              tintColor: '#A7A7A7',
+              tintColor: '#646B73',
               marginLeft: 25,
               marginTop: 25,
             }}
@@ -230,7 +220,7 @@ const AllExpenses = () => {
       <SafeAreaView style={{ flex: 1 }}>
         {renderHeader()}
         <ScrollView style={{ flex: 1 }}>
-          {renderTransactionHistory()}
+          {renderBudgetHistory()}
         </ScrollView>
         <BottomPanel />
       </SafeAreaView>
@@ -280,4 +270,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default AllExpenses;
+export default AllBudgets;
