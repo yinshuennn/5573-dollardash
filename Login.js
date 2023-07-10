@@ -1,44 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import disableEye from '../assets/icons/disable_eye.png';
 import eye from '../assets/icons/eye.png';
-import { useNavigation } from '@react-navigation/core';
-import { auth } from '../firebase';
 
-const Login = () => {
+const Login = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = React.useState(false)
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const navigation = useNavigation()
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.replace("Home")
-      }
-    })
-
-    return unsubscribe
-  }, [])
-
-  const handleSignUp = () => {
-    navigation.navigate('SignUp');
-  }
-
-  const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Logged in with:', user.email);
-        navigation.navigate('Home');
-      })
-      .catch(error => alert(error.message))
-  }
 
   const handleBack = () => {
     navigation.navigate('Launch');
@@ -48,33 +17,35 @@ const Login = () => {
     navigation.navigate('ForgotPassword');
   }
 
+  const handleSignUp = () => {
+    navigation.navigate('SignUp');
+  }
+
   function renderHeader() {
     return (
+        <TouchableOpacity
+            style={{
+                flexDirection: 'row',
+                alignItems: "center",
+            }}
+            onPress={handleBack}
+        >
+            <Image
+                source={require('../assets/icons/back.png')}
+                resizeMode="contain"
+                style={{
+                    width: 20,
+                    height: 20,
+                    tintColor: 'black',
+                    marginLeft: 25,
+                    marginTop: 25
+                }}
+            />
 
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-        onPress={handleBack}
-      >
-        <Image
-          source={require('../assets/icons/back.png')}
-          resizeMode="contain"
-          style={{
-            width: 20,
-            height: 20,
-            tintColor: 'black',
-            marginLeft: 25,
-            marginTop: 25,
-          }}
-        />
-  
-        <Text style={{ marginTop: 25, marginLeft: 150, color: 'black', fontSize: 16 }}>Login</Text>
-      </TouchableOpacity>
-    );
+            <Text style={{ marginTop: 25, marginLeft: 120, color: 'black', fontSize: 16 }}>Login</Text>
+        </TouchableOpacity>
+    )
   }
-  
 
   function renderForm() {
     return (
@@ -95,8 +66,6 @@ const Login = () => {
             fontSize: 16
           }}
           placeholder="Email"
-          value={email}
-          onChangeText={text => setEmail(text)}
           placeholderTextColor='#91919F'
           selectionColor='#91919F'
         />
@@ -114,8 +83,6 @@ const Login = () => {
               fontSize: 16
           }}
           placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
           placeholderTextColor='#91919F'
           selectionColor='#91919F'
           secureTextEntry={!showPassword}
@@ -150,13 +117,12 @@ const Login = () => {
             <TouchableOpacity
                 style={{
                     height: 60,
-                    marginTop: -20,
                     backgroundColor: '#646B73',
                     borderRadius: 20,
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}
-                onPress={handleLogin}
+                onPress={() => navigation.navigate("Home")}
             >
                 <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Login</Text>
             </TouchableOpacity>
@@ -166,7 +132,7 @@ const Login = () => {
 
   function renderForget() {
     return (
-      <View style={{ marginHorizontal: 40, marginTop: -30 }}>
+      <View style={{ marginHorizontal: 60, marginTop: -30 }}>
         <TouchableOpacity
           style={{
             height: 60,
