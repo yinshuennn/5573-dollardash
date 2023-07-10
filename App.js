@@ -16,6 +16,8 @@ import ChangePassword from './screens/ChangePassword';
 import Notifications from './screens/Notifications';
 import Groups from './screens/Groups';
 import AllExpenses from './screens/AllExpenses';
+import AllBudgets from './screens/AllBudgets';
+import Incomes from './screens/Incomes';
 import Pie from './screens/Pie';
 
 const Stack = createNativeStackNavigator();
@@ -36,10 +38,12 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="Groups" component={Groups} />
         <Stack.Screen options={{ headerShown: false }} name="AddNewExpense" component={AddNewExpense} />
         <Stack.Screen options={{ headerShown: false }} name="AllExpenses" component={AllExpenses} />
+        <Stack.Screen options={{ headerShown: false }} name="AllBudgets" component={AllBudgets} />
         <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
         <Stack.Screen options={{ headerShown: false }} name="EditEmail" component={EditEmail} />
         <Stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
         <Stack.Screen options={{ headerShown: false }} name="Notifications" component={Notifications} />
+        <Stack.Screen options={{ headerShown: false }} name="Incomes" component={Incomes} />
       </Stack.Navigator>
     </NavigationContainer>       
   );
