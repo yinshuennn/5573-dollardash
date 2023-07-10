@@ -58,10 +58,10 @@ const AllBudgets = () => {
           .where('userId', '==', currentUser.uid)
           .orderBy('createdAt', 'desc')
           .onSnapshot((querySnapshot) => {
-            const bugets = [];
+            const budgets = [];
             querySnapshot.forEach((doc) => {
               const { budget, category } = doc.data();
-              bugets.push({
+              budgets.push({
                 id: doc.id,
                 budget,
                 category,
