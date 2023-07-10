@@ -35,7 +35,7 @@ const Login = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
-        navigation.navigate('SignUp');
+        navigation.navigate('Home');
       })
       .catch(error => alert(error.message))
   }
@@ -50,6 +50,7 @@ const Login = () => {
 
   function renderHeader() {
     return (
+
       <TouchableOpacity
         style={{
           flexDirection: 'row',
@@ -149,6 +150,7 @@ const Login = () => {
             <TouchableOpacity
                 style={{
                     height: 60,
+                    marginTop: -20,
                     backgroundColor: '#646B73',
                     borderRadius: 20,
                     alignItems: 'center',
@@ -164,7 +166,7 @@ const Login = () => {
 
   function renderForget() {
     return (
-      <View style={{ marginHorizontal: 60, marginTop: -30 }}>
+      <View style={{ marginHorizontal: 40, marginTop: -30 }}>
         <TouchableOpacity
           style={{
             height: 60,

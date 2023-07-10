@@ -44,6 +44,11 @@ const Profile = () => {
     const handleAddExpense = () => {
         navigation.navigate('AddNewExpense');
     }
+
+    const handleBudget = () => {
+        navigation.navigate('Budget');
+    }
+    
     const userName = '';
     const userId = auth.currentUser?.uid;
     if (userId) {
@@ -198,7 +203,7 @@ const Profile = () => {
                             <Text style={[styles.title, {
                                 marginTop:15,
                                 marginBottom: 5,
-                            }]}>{userName}</Text>
+                            }]}>username</Text>
                             <Text style={styles.emailText}>{auth.currentUser?.email}</Text>
                         </View>
                     </View>
@@ -302,20 +307,20 @@ const Profile = () => {
                         flexDirection: 'column',
                         alignItems: "center",
                         }}
-                        onPress={() => console.log("Groups")}
+                        onPress={handleBudget}
                     >
                         <Image
-                            source={require('../assets/images/groups.png')}
+                            source={require('../assets/icons/budget.png')}
                             resizeMode="contain"
                             style={{
-                            width: 35,
-                            height: 35,
+                            width: 30,
+                            height: 30,
                             tintColor: '#A7A7A7',
                             marginLeft: 25,
                             marginTop: 25,
                             }}
                         />
-                        <Text style={{ marginLeft: 20, marginTop: 5 }}>Groups</Text>
+                        <Text style={{ marginLeft: 20, marginTop: 5 }}>Budget</Text>
                         </TouchableOpacity>
   
                         <TouchableOpacity
