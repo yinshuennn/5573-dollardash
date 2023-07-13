@@ -6,7 +6,7 @@ import { Pressable } from 'react-native';
 import { firebase, auth } from '../firebase';
 import { set } from 'react-native-reanimated';
 
-const AllExpenses = () => {
+const Incomes = () => {
 
   const navigation = useNavigation()
 
@@ -276,4 +276,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default AllExpenses;
+export default Incomes;
