@@ -26,30 +26,31 @@ const Budget = () => {
   };
 
   const addField = () => {
-    if (budget && category && 
-      budget.length > 0 && category.length > 0) {
+    if (budget && category && budget.length > 0 && category.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const userId = firebase.auth().currentUser.uid;
       const data = {
         budget: budget,
         category: category,
-        createdAt: timestamp
+        createdAt: timestamp,
+        userId: userId, // Include the user ID in the budget data
       };
       todoRef
         .add(data)
         .then(() => {
           setBudget('');
           setCategory('');
-          Keyboard.dismiss()
+          Keyboard.dismiss();
+          navigation.navigate('AllBudgets');
+          Alert.alert('Budget added!');
         })
         .catch((error) => {
           alert(error);
         });
-      navigation.navigate('OnboardingComplete');
-      Alert.alert('Budget added!');
     } else {
       Alert.alert('Please fill in all fields');
     }
-  }
+  };
   
   function renderHeader() {
     return (

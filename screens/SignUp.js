@@ -192,7 +192,7 @@ const SignUp = () => {
           const user = userCredentials.user;
           saveUserNameToFirebase(user.uid, name);
           console.log('Registered with:', user.email);
-          navigation.navigate('Home');
+          navigation.navigate('Budget');
         })
         .catch(error => alert(error.message));
     };

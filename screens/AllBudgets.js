@@ -25,6 +25,10 @@ const AllBudgets = () => {
     navigation.navigate('Groups');
   }
 
+  const handleAddBudget = () => {
+    navigation.navigate('BudgetHome');
+  }
+
   const handleTransactionHistory = () => {
     navigation.navigate('AllExpenses');
   }
@@ -49,14 +53,26 @@ const AllBudgets = () => {
 
   function renderBudgetHistory() {
     const [budgets, setBudgets] = useState([]);
-    const bugetsRef = firebase.firestore().collection('Budget');
+    const budgetsRef = firebase.firestore().collection('Budget');
     const currentUser = auth.currentUser;
+  
+    const deleteBudget = (budgetId) => {
+      budgetsRef
+        .doc(budgetId)
+        .delete()
+        .then(() => {
+          console.log('Budget deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Error deleting budget: ', error);
+        });
+    };
   
     useEffect(() => {
       if (currentUser) {
-        const unsubscribe = bugetsRef
+        const unsubscribe = budgetsRef
           .where('userId', '==', currentUser.uid)
-          .orderBy('createdAt', 'desc')
+          .orderBy('createdAt')
           .onSnapshot((querySnapshot) => {
             const budgets = [];
             querySnapshot.forEach((doc) => {
@@ -76,7 +92,7 @@ const AllBudgets = () => {
   
     return (
       <ScrollView style={{ flex: 1 }}>
-        {/* Conditional rendering based on transactions */}
+        {/* Conditional rendering based on budgets */}
         {budgets.length === 0 ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
@@ -88,21 +104,47 @@ const AllBudgets = () => {
         ) : (
           <FlatList
             style={{ height: '30%' }}
-            data={transactions}
+            data={budgets}
             numColumns={1}
             renderItem={({ item }) => (
-              <Pressable style={styles.container}>
+              <View style={styles.container}>
                 <View style={styles.contentContainer}>
-                  <Text style={styles.description}>{item.description}</Text>
+                  <Text style={styles.description}>{item.category}</Text>
                 </View>
                 <Text style={styles.price}>${item.budget}</Text>
-              </Pressable>
+                <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deleteBudget(item.id)}
+              >
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
             )}
           />
         )}
       </ScrollView>
     );
   }
+  
+  function renderAddBudgetButton() {
+    return (
+        <View style={{ margin: 40 }}>
+            <TouchableOpacity
+                style={{
+                    height: 60,
+                    marginTop: -20,
+                    backgroundColor: '#646B73',
+                    borderRadius: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                onPress={handleAddBudget}
+            >
+                <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Add New Budget</Text>
+            </TouchableOpacity>
+        </View>
+    )
+  } 
 
   function BottomPanel() {
     return (
@@ -221,6 +263,7 @@ const AllBudgets = () => {
         {renderHeader()}
         <ScrollView style={{ flex: 1 }}>
           {renderBudgetHistory()}
+          {renderAddBudgetButton()}
         </ScrollView>
         <BottomPanel />
       </SafeAreaView>
