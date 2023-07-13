@@ -21,14 +21,6 @@ const AllExpenses = () => {
     navigation.navigate('AddNewExpense');
   }
 
-  const handleGroups = () => {
-    navigation.navigate('Groups');
-  }
-
-  const handleBills = () => {
-    navigation.navigate('Groups');
-  }
-
   const handleBudget = () => {
     navigation.navigate('Groups');
   }
