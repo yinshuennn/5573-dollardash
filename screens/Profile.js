@@ -46,7 +46,7 @@ const Profile = () => {
     }
 
     const handleBudget = () => {
-        navigation.navigate('Budget');
+        navigation.navigate('AllBudgets');
     }
     
     const userName = '';

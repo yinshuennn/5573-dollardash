@@ -16,28 +16,6 @@ const Income = () => {
     navigation.navigate('Home');
   };
 
-  // const addField = () => {
-  //   if (income && income.length > 0) {
-  //     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-  //     const data = {
-  //       income: income,
-  //       createdAt: timestamp
-  //     };
-  //     todoRef
-  //       .add(data)
-  //       .then(() => {
-  //         setIncome('');
-  //         Keyboard.dismiss()
-  //       })
-  //       .catch((error) => {
-  //         alert(error);
-  //       });
-  //     navigation.navigate('Budget');
-  //     Alert.alert('Income added!');
-  //   } else {
-  //     Alert.alert('Please input your income!');
-  //   }
-  // }
   const addField = () => {
     if (income && income.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -55,7 +33,7 @@ const Income = () => {
           alert(error);
         });
       Alert.alert('Income added!');
-      navigation.navigate('Budget'); // Navigate to the budget page
+      navigation.navigate('BudgetOnboarding'); // Navigate to the budget page
     } else {
       Alert.alert('Please input your income!');
     }

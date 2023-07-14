@@ -31,7 +31,7 @@ const AllExpenses = () => {
   }
 
   const handleBudget = () => {
-    navigation.navigate('Groups');
+    navigation.navigate('AllBudgets');
   }
 
   const handleTransactionHistory = () => {
