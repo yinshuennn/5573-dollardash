@@ -19,9 +19,11 @@ const Income = () => {
   const addField = () => {
     if (income && income.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const userId = firebase.auth().currentUser.uid;
       const data = {
         income: income,
-        createdAt: timestamp
+        createdAt: timestamp,
+        userId: userId,
       };
       todoRef
         .add(data)
