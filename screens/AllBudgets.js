@@ -22,7 +22,7 @@ const AllBudgets = () => {
   }
 
   const handleBudget = () => {
-    navigation.navigate('Groups');
+    navigation.navigate('AllBudgets');
   }
 
   const handleAddBudget = () => {

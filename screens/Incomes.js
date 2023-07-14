@@ -22,20 +22,20 @@ const AllExpenses = () => {
     navigation.navigate('AddNewExpense');
   }
 
-  const handleGroups = () => {
-    navigation.navigate('Groups');
-  }
-
   const handleBills = () => {
     navigation.navigate('Groups');
   }
 
-  const handleBudget = () => {
-    navigation.navigate('AllBudgets');
+  const handleEditIncome = () => {
+    navigation.navigate('IncomeHome');
   }
 
   const handleTransactionHistory = () => {
     navigation.navigate('AllExpenses');
+  }
+
+  const handleBudget = () => {
+    navigation.navigate('AllBudgets');
   }
 
   function renderHeader() {
@@ -60,6 +60,18 @@ const AllExpenses = () => {
     const [incomes, setIncome] = useState([]);
     const incomeRef = firebase.firestore().collection('Income');
     const currentUser = auth.currentUser;
+
+    const deleteIncome = (incomeId) => {
+      incomeRef
+        .doc(incomeId)
+        .delete()
+        .then(() => {
+          console.log('Income deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Error deleting Income: ', error);
+        });
+    };
   
     useEffect(() => {
       if (currentUser) {
@@ -84,7 +96,7 @@ const AllExpenses = () => {
   
     return (
       <ScrollView style={{ flex: 1 }}>
-        {/* Conditional rendering based on transactions */}
+        {/* Conditional rendering based on income */}
         {incomes.length === 0 ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ marginTop: 20, fontSize: 12, color: 'grey' }}>
@@ -102,6 +114,12 @@ const AllExpenses = () => {
                 <Text style={styles.category}>Income</Text>
               </View>
               <Text style={styles.price}>${item.income}</Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deleteIncome(item.id)}
+              >
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
             </View>
           )}
         />
@@ -109,6 +127,26 @@ const AllExpenses = () => {
     </ScrollView>
     );
   }
+
+  function renderEditIncomeButton() {
+    return (
+        <View style={{ margin: 40 }}>
+            <TouchableOpacity
+                style={{
+                    height: 60,
+                    marginTop: -20,
+                    backgroundColor: '#646B73',
+                    borderRadius: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                onPress={handleEditIncome}
+            >
+                <Text style={{ color: '#FCFCFC', fontSize: 16 }}>Update Income</Text>
+            </TouchableOpacity>
+        </View>
+    )
+  } 
 
   function BottomPanel() {
     return (
@@ -126,7 +164,7 @@ const AllExpenses = () => {
             style={{
               width: 30,
               height: 30,
-              tintColor: '#646B73',
+              tintColor: '#A7A7A7',
               marginLeft: 10,
               marginTop: 25,
             }}
@@ -227,6 +265,7 @@ const AllExpenses = () => {
         {renderHeader()}
         <ScrollView style={{ flex: 1 }}>
           {renderIncome()}
+          {renderEditIncomeButton()}
         </ScrollView>
         <BottomPanel />
       </SafeAreaView>
