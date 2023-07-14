@@ -26,7 +26,7 @@ const Home = () => {
   }
 
   const handleBills = () => {
-    navigation.navigate('Groups');
+    navigation.navigate('Bills');
   }
 
   const handleBudget = () => {
