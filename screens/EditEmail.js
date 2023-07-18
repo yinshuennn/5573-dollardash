@@ -28,6 +28,7 @@ const EditEmail = () => {
         .updateEmail(newEmail)
         .then(() => {
             navigation.navigate('Profile')
+            Alert.alert('Email edited!')
         })
         .catch(error => {
             if (error.code === 'auth/requires-recent-login') {
@@ -62,7 +63,7 @@ const EditEmail = () => {
                     }}
                 />
     
-                <Text style={{ marginTop: 25, marginLeft: 105, color: 'black', fontSize: 16 }}>Edit Email</Text>
+                <Text style={{ marginTop: 25, marginLeft: 135, color: 'black', fontSize: 16 }}>Edit Email</Text>
             </TouchableOpacity>
         )
     }

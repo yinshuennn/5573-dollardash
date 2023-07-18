@@ -6,7 +6,7 @@ import disableEye from '../assets/icons/disable_eye.png';
 import eye from '../assets/icons/eye.png';
 import { auth } from '../firebase';
 
-const EditEmail = () => {
+const ChangePassword = () => {
 
     const navigation = useNavigation()
 
@@ -184,7 +184,7 @@ const EditEmail = () => {
     );
 }
 
-export default EditEmail;
+export default ChangePassword;
 
 const styles = StyleSheet.create({
     container: {
