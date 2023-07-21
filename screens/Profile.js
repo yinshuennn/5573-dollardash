@@ -199,11 +199,7 @@ const Profile = () => {
                             </View>
                         </TouchableOpacity>
 
-                        <View style={{marginTop: 20, marginLeft: 20}}>
-                            <Text style={[styles.title, {
-                                marginTop:15,
-                                marginBottom: 5,
-                            }]}>username</Text>
+                        <View style={{marginTop: 50, marginLeft: 20}}>
                             <Text style={styles.emailText}>{auth.currentUser?.email}</Text>
                         </View>
                     </View>
@@ -364,9 +360,9 @@ const styles = StyleSheet.create({
     },
     emailText: {
         marginTop: 10,
-        fontSize: 14,
+        fontSize: 13,
         lineHeight: 14,
-        fontWeight: '500',
+        fontWeight: 'bold',
     },
     header: {
         backgroundColor: '#FFFFFF',
