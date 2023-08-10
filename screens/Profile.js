@@ -63,8 +63,6 @@ const Profile = () => {
             userName = userData.name;
             console.log('User name retrieved:', userName);
             // Use the user's name in your application logic
-        } else {
-            console.log('User document not found');
         }
         })
         .catch((error) => {
