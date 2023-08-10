@@ -5,6 +5,7 @@ import { SelectedOptionProvider } from './SelectedOptionContext';
 import LaunchScreen from './screens/Launch';
 import LoginScreen from './screens/Login';
 import ForgotPassword from './screens/ForgotPassword';
+import SendEmail from './screens/SendEmail';
 import SignUpScreen from './screens/SignUp';
 import Income from './screens/IncomeHome';
 import Budget from './screens/BudgetHome';
@@ -24,7 +25,6 @@ import Bills from './screens/Bills';
 import BillDetails from './screens/BillDetails';
 import AddNewBill from './screens/AddNewBill'
 import RepeatOptions from './screens/RepeatOptions'
-import { SelectedOptionContext } from './SelectedOptionContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +36,7 @@ export default function App() {
           <Stack.Screen options={{ headerShown: false }} name="Launch" component={LaunchScreen} />
           <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
           <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen options={{ headerShown: false }} name="SendEmail" component={SendEmail} />
           <Stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUpScreen} />
           <Stack.Screen options={{ headerShown: false }} name="Income" component={Income} />
           <Stack.Screen options={{ headerShown: false }} name="Budget" component={Budget} />
