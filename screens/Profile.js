@@ -29,6 +29,10 @@ const Profile = () => {
         navigation.navigate('Home');
     };
 
+    const handleTransaction = () => {
+        navigation.navigate('AllExpenses');
+    };
+
     const handleEditEmail = () => {
         navigation.navigate('EditEmail');
     }
@@ -262,7 +266,7 @@ const Profile = () => {
                         flexDirection: 'column',
                         alignItems: "center",
                         }}
-                        onPress={() => console.log("Transaction")}
+                        onPress={handleTransaction}
                     >
                         <Image
                             source={require('../assets/images/transaction.png')}
